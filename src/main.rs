@@ -4,7 +4,13 @@
 #![deny(clippy::print_stdout)]
 #![deny(clippy::print_stderr)]
 
-use anyhow::Result;
+extern crate anyhow;
+extern crate lapce_plugin;
+extern crate serde_json;
+
+use std::process;
+
+use anyhow::{anyhow, Result, Error};
 use lapce_plugin::{
     psp_types::{
         lsp_types::{request::Initialize, DocumentFilter, DocumentSelector, InitializeParams, Url, MessageType},
@@ -82,11 +88,47 @@ fn initialize(params: InitializeParams) -> Result<()> {
         Ok("windows") => "windows",
         _ => return Ok(()),
     };
-
-    // Download URL
-    // let _ = format!("https://github.com/<name>/<project>/releases/download/<version>/{filename}");
-
-    // see lapce_plugin::Http for available API to download files
+    
+    // check that npm is installed
+    // and throw an error if it isnt
+    fn check_npm_available() -> Result<(), Error> {
+        process::Command::new("npm")
+            .arg("--version")
+            .status()?;
+        Ok(())
+    }
+    
+    fn install_emmet() -> Result<(), Error>{
+        process::Command::new("npm")
+            .arg("install")
+            .arg("-g")
+            .arg("emmet-ls")
+            .status()?;
+        Ok(())
+    }
+    
+    match check_npm_available() {
+        Ok(()) => match install_emmet() {
+            Ok(()) => PLUGIN_RPC.window_show_message(
+                MessageType::INFO,
+                format!("Emmet-ls installed successfully!")
+            ),
+            Err(e) => {
+                PLUGIN_RPC.window_show_message(
+                    MessageType::ERROR,
+                    format!("Emmet-ls failed to install.")
+                );
+                return Err(anyhow!(e))
+            }
+        },
+        Err(e) => {
+            PLUGIN_RPC.window_show_message(
+                MessageType::ERROR,
+                format!("Could not find npm. Npm must be available to download emmet-ls.")
+            );
+            return Err(anyhow!(e))
+        }
+    }
 
     let _ = match VoltEnvironment::operating_system().as_deref() {
         Ok("windows") => {
@@ -97,7 +139,7 @@ fn initialize(params: InitializeParams) -> Result<()> {
 
     // Plugin working directory
     let volt_uri = VoltEnvironment::uri()?;
-    let server_uri = Url::parse(&volt_uri)?.join("[filename]")?;
+    let server_uri = Url::parse(&volt_uri)?.join("emmet")?;
 
     // if you want to use server from PATH
     // let server_uri = Url::parse(&format!("urn:{filename}"))?;

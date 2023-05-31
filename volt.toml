@@ -1,17 +1,41 @@
-name = "<plugin-name>"
-version = "0.0.0"
-author = "<your name>"
-display-name = "<plugin-display-name>"
-description = "<plugin-description>"
-wasm = "bin/<plugin-name>.wasm"
+name = "lapce-emmet-ls"
+version = "0.1.0"
+author = "Zach Hornung"
+display-name = "lapce-emmet-ls"
+description = "Emmet for Lapce"
+wasm = "bin/lapce-emmet-ls.wasm"
+icon = "emmet-logo.svg"
+repository = "https://github.com/zachhornung/lapce-emmet-ls"
 
 [activation]
-language = []
-workspace-contains = []
+language = [
+  "html", 
+  "javascriptreact", 
+  "typescriptreact", 
+  "css",
+  "less",
+  "sass",
+  "scss",
+  "svelte",
+  "pug",
+  "vue"
+]
+workspace-contains = [
+  "**/*.html",
+  "**/*.jsx",
+  "**/*.tsx",
+  "**/*.css",
+  "**/*.less",
+  "**/*.sass",
+  "**/*.scss",
+  "**/*.svelte",
+  "**/*.pug",
+  "**/*.vue",
+]
 
 [config."lsp.serverPath"]
 default = ""
-description = "Path to custom LSP executable"
+description = "Path to emmet-ls"
 
 # [config."lsp.serverArgs"]
 # default = []

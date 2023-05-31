@@ -1,0 +1,9 @@
+name = "lapce-emmet-ls"
+version = "0.1.0"
+author = "Zach Hornung"
+display-name = "Emmet"
+description = "Emmet for Lapce"
+wasm = "lapce-emmet-ls.wasm"
+
+[configuration]
+language_id = "emmet"
