@@ -5,5 +5,3 @@ display-name = "Emmet"
 description = "Emmet for Lapce"
 wasm = "lapce-emmet-ls.wasm"
 
-[configuration]
-language_id = "emmet"

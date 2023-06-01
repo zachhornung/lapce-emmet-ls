@@ -37,9 +37,9 @@ workspace-contains = [
 default = ""
 description = "Path to emmet-ls"
 
-# [config."lsp.serverArgs"]
-# default = []
-# description = ""
+[config."lsp.serverArgs"]
+default = ["--stdio"]
+description = "Arguments to pass to emmet-ls. `--stdio` is default and required f"
 
 # [config."lspSettingArray"]
 # default = []

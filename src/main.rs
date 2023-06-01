@@ -28,9 +28,9 @@ register_plugin!(State);
 fn initialize(params: InitializeParams) -> Result<()> {
     let document_selector: DocumentSelector = vec![DocumentFilter {
         // lsp language id
-        language: Some(String::from("language_id")),
+        language: Some(String::from("html")),
         // glob pattern
-        pattern: Some(String::from("**/*.{ext1,ext2}")),
+        pattern: Some(String::from("**/*.{jsx,tsx}")),
         // like file:
         scheme: None,
     }];
@@ -92,7 +92,7 @@ fn initialize(params: InitializeParams) -> Result<()> {
     // check that npm is installed
     // and throw an error if it isnt
     fn check_npm_available() -> Result<(), Error> {
-        process::Command::new("npm")
+        let res = process::Command::new("npm")
             .arg("--version")
             .status()?;
         Ok(())
